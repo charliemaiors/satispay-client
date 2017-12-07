@@ -52,10 +52,10 @@ func (client *Client) CheckBearer() bool {
 	return true
 }
 
-func (client *Client) CreateUser(phoneNumber string) (*User, error) {
+func (client *Client) CreateUser(phoneNumber string) (User, error) {
 
 	if phoneNumber == "" {
-		return nil, errors.New("Phone number missing")
+		return User{}, errors.New("Phone number missing")
 	}
 
 	bodyStruct := newUser{PhoneNumber: phoneNumber}
@@ -63,33 +63,33 @@ func (client *Client) CreateUser(phoneNumber string) (*User, error) {
 
 	if err != nil {
 		log.Errorf("Got error marshaling struct %v", err)
-		return nil, err
+		return User{}, err
 	}
 
 	request, err := http.NewRequest("POST", client.endpoint+"/online/v1/users", strings.NewReader(string(bodyBytes)))
 	if err != nil {
 		log.Errorf("Got error during request creation %v", err)
-		return nil, err
+		return User{}, err
 	}
 
 	response, err := client.do(request)
 	if err != nil {
 		log.Errorf("Got error in response %v", err)
-		return nil, err
+		return User{}, err
 	}
 
 	if response.StatusCode == 400 {
-		return nil, errors.New("Something bad happened, could be an invalid phone number or shop validation error")
+		return User{}, errors.New("Something bad happened, could be an invalid phone number or shop validation error")
 	}
 	if response.StatusCode == 404 {
-		return nil, errors.New("The phone number isn’t from a registered user")
+		return User{}, errors.New("The phone number isn’t from a registered user")
 	}
 
 	decoder := json.NewDecoder(response.Body)
-	user := &User{}
-	err = decoder.Decode(user)
+	user := User{}
+	err = decoder.Decode(&user)
 	if err != nil {
-		return nil, err
+		return User{}, err
 	}
 	return user, nil
 }
