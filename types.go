@@ -23,3 +23,8 @@ type User struct {
 	ID          string `json:"id"`
 	PhoneNumber string `json:"phone_number"`
 }
+
+type userListResponse struct {
+	HasMore bool   `json:"has_more"`
+	List    []User `json:"list"`
+}
