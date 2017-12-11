@@ -97,6 +97,10 @@ func (client *Client) GetUser(userID string) (User, error) {
 
 	response, err := client.do(request)
 
+	if response.StatusCode == 404 {
+		return User{}, errors.New("UserShop don’t exist")
+	}
+
 	user := User{}
 	dec := json.NewDecoder(response.Body)
 	err = dec.Decode(user)
