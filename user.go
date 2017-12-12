@@ -59,7 +59,7 @@ func (client *Client) CreateUser(phoneNumber string) (User, error) {
 //UserList get the list of Shop Users of a Online shop.
 func (client *Client) UserList(limit int, startingAfter, endingBefore string) ([]User, error) {
 
-	url := composeURL(limit, client.endpoint, startingAfter, endingBefore)
+	url := composeURL(limit, client.endpoint+"/v1/users", startingAfter, endingBefore)
 	request, err := http.NewRequest("GET", url, nil)
 
 	if err != nil {
@@ -116,32 +116,4 @@ func (client *Client) GetUser(userID string) (User, error) {
 	}
 
 	return user, nil
-}
-
-func composeURL(limit int, initialURL, startingAfter, endingBefore string) string {
-	url := initialURL + "/v1/users?"
-	if limit > 0 && limit < 100 {
-		url += "limit=" + string(limit)
-	} else {
-		url += "limit=20"
-	}
-	if startingAfter != "" {
-		_, err := uuid.FromString(startingAfter)
-
-		if err != nil {
-			log.Errorf("Invalid initial UUID, parsing error: %v\nIgnoring parameter", err)
-		} else {
-			url += "&starting_after=" + startingAfter
-		}
-	}
-	if endingBefore != "" {
-		_, err := uuid.FromString(endingBefore)
-
-		if err != nil {
-			log.Errorf("Invalid ending UUID, parsing error: %v\nIgnoring parameter", err)
-		} else {
-			url += "&ending_before=" + endingBefore
-		}
-	}
-	return url
 }

@@ -2,11 +2,7 @@ package client
 
 import (
 	"net/http"
-)
-
-const (
-	productionEndpoint = "https://authservices.satispay.com/online"
-	sandBoxAPIEndpoint = "https://staging.authservices.satispay.com/online"
+	"time"
 )
 
 //ChargeStatus represent the status of requested Charge
@@ -49,12 +45,44 @@ type Client struct {
 	httpClient  *http.Client
 }
 
-type newUser struct {
+type User struct {
+	ID          string `json:"id"`
 	PhoneNumber string `json:"phone_number"`
 }
 
-type User struct {
-	ID          string `json:"id"`
+type ChargeRequest struct {
+	UserID               string            `json:"user_id"`
+	Description          string            `json:"description"`
+	Currency             string            `json:"currency"`
+	CallBackURL          string            `json:"callback_url"`
+	Amount               int64             `json:"amount"`
+	Metdata              map[string]string `json:"metadata"`
+	RequiredSuccessEmail bool              `json:"required_success_email"`
+	ExpireIn             int               `json:"expire_in"`
+}
+
+type Charge struct {
+	ID                   string            `json:"id"`
+	Description          string            `json:"description"`
+	Currency             string            `json:"currency"`
+	Amount               int64             `json:"amount"`
+	Status               ChargeStatus      `json:"status"`
+	UserID               string            `json:"user_id"`
+	UserShortName        string            `json:"user_short_name"`
+	Metadata             map[string]string `json:"metadata"`
+	RequiredSuccessEmail bool              `json:"required_success_email"`
+	ExpireDate           time.Time         `json:"expire_date"`
+	CallbackURL          string            `json:"callback_url"`
+}
+
+// Private types and constants
+
+const (
+	productionEndpoint = "https://authservices.satispay.com/online"
+	sandBoxAPIEndpoint = "https://staging.authservices.satispay.com/online"
+)
+
+type newUser struct {
 	PhoneNumber string `json:"phone_number"`
 }
 
