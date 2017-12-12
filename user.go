@@ -10,6 +10,10 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+//CreateUser create a user you want to send Charge request to. The user must be subscribed to satispay service.
+//Once you create a user you do not need to create it again but it is enough create a Charge with the user id used previously.
+//But don’t worry, if you do not store user id you can call again the Create a user and, for the same phone number,
+//it will always return the same user id.
 func (client *Client) CreateUser(phoneNumber string) (User, error) {
 
 	if phoneNumber == "" {
@@ -52,6 +56,7 @@ func (client *Client) CreateUser(phoneNumber string) (User, error) {
 	return user, nil
 }
 
+//UserList get the list of Shop Users of a Online shop.
 func (client *Client) UserList(limit int, startingAfter, endingBefore string) ([]User, error) {
 
 	url := composeURL(limit, client.endpoint, startingAfter, endingBefore)
