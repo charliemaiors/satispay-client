@@ -8,9 +8,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-//NewRequest create a new ChargeRequest performing validations on parameters as specified in Satispay API documentation
+//NewChargeRequest create a new ChargeRequest performing validations on parameters as specified in Satispay API documentation
 //https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html#create-a-charge
-func NewRequest(userID, description, currency, callbackUrl string, metadata map[string]string, requiredSuccessEmail bool, amount int64, expireIn int) (*ChargeRequest, error) {
+func NewChargeRequest(userID, description, currency, callbackUrl string, metadata map[string]string, requiredSuccessEmail bool, amount int64, expireIn int) (*ChargeRequest, error) {
 	_, err := uuid.FromString(userID)
 
 	if err != nil {
@@ -44,6 +44,10 @@ func NewRequest(userID, description, currency, callbackUrl string, metadata map[
 	}
 
 	return &ChargeRequest{Amount: amount, CallBackURL: callbackUrl, Currency: currency, Description: description, ExpireIn: expireIn, Metdata: metadata, RequiredSuccessEmail: requiredSuccessEmail, UserID: userID}, nil
+}
+
+func NewRefundRequest() {
+	
 }
 
 func composeURL(limit int, initialURL, startingAfter, endingBefore string) string {

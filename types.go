@@ -42,6 +42,20 @@ const (
 	Expired
 )
 
+//RefundReason indicating the reason for the refund.
+type RefundReason int
+
+const (
+	//Duplicate means a charge payed twice for some reason
+	Duplicate RefundReason = iota
+
+	//Fraudolent means that a charge is fraudolent
+	Fraudolent
+
+	//RequestedByCustomer for other reason requested by customer
+	RequestedByCustomer
+)
+
 //Client is the main structure of this library, represent the main client in order to interact with Satispay platform
 type Client struct {
 	bearerToken string
@@ -81,6 +95,21 @@ type Charge struct {
 	RequiredSuccessEmail bool               `json:"required_success_email"`
 	ExpireDate           time.Time          `json:"expire_date"`
 	CallbackURL          string             `json:"callback_url"`
+}
+
+//RefundRequest represent the request for refund in Satispay Platform
+type RefundRequest struct {
+	ChargeID    string            `json"charge_id"`
+	Description string            `json"description"`
+	Amount      int64             `json"amount"`
+	Currency    string            `json"currency"`
+	Reason      RefundReason      `json"reason"`
+	Metadata    map[string]string `json"metadata"`
+}
+
+type Refund struct {
+	ID string `json"id"`
+	*RefundRequest
 }
 
 // Private types and constants
