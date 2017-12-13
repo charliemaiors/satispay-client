@@ -46,8 +46,37 @@ func NewChargeRequest(userID, description, currency, callbackUrl string, metadat
 	return &ChargeRequest{Amount: amount, CallBackURL: callbackUrl, Currency: currency, Description: description, ExpireIn: expireIn, Metdata: metadata, RequiredSuccessEmail: requiredSuccessEmail, UserID: userID}, nil
 }
 
-func NewRefundRequest() {
-	
+//NewRefundRequest create a new refund request structure performing validation described in Satispay API
+//https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html#create-a-refund
+func NewRefundRequest(chargeID, description, currency string, amount int64, reason RefundReason, metadata map[string]string) (*RefundRequest, error) {
+	if _, err := uuid.FromString(chargeID); err != nil {
+		log.Errorf("Invalid charge id %v", err)
+		return nil, err
+	}
+
+	if len(description) > 255 {
+		log.Errorf("Description to long!")
+		return nil, errors.New("Description to long")
+	}
+
+	if currency != "EUR" {
+		log.Errorf("Invalid currency only EUR is supported (until now)")
+		return nil, errors.New("Invalid currency only EUR is supported (until now)")
+	}
+
+	if amount < 0 {
+		log.Errorf("Negative amount")
+		return nil, errors.New("Negative amount")
+	}
+
+	return &RefundRequest{
+		Amount:      amount,
+		ChargeID:    chargeID,
+		Currency:    currency,
+		Description: description,
+		Metadata:    metadata,
+		Reason:      reason,
+	}, nil
 }
 
 func composeURL(limit int, initialURL, startingAfter, endingBefore string) string {

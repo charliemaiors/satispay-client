@@ -151,6 +151,19 @@ func (request *ChargeRequest) String() string {
 	return string(jsonifiedRequest)
 }
 
+//String is the implementation of Stringer interface for RefundRequest
+func (request *RefundRequest) String() string {
+	jsonifiedRequest, err := json.Marshal(request)
+
+	if err != nil {
+		log.Errorf("Got error while marshaling request %v", err)
+		return ""
+	}
+
+	return string(jsonifiedRequest)
+}
+
+//String is the implementation of Stringer interface for chargeUpdate
 func (update chargeUpdate) String() string {
 	jsonifiedUpdate, err := json.Marshal(update)
 
