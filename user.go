@@ -10,6 +10,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const userSuffix = "/v1/users"
+
 //CreateUser create a user you want to send Charge request to. The user must be subscribed to satispay service.
 //Once you create a user you do not need to create it again but it is enough create a Charge with the user id used previously.
 //But don’t worry, if you do not store user id you can call again the Create a user and, for the same phone number,
@@ -28,7 +30,7 @@ func (client *Client) CreateUser(phoneNumber string) (User, error) {
 		return User{}, err
 	}
 
-	request, err := http.NewRequest("POST", client.endpoint+"/v1/users", strings.NewReader(string(bodyBytes)))
+	request, err := http.NewRequest("POST", client.endpoint+userSuffix, strings.NewReader(string(bodyBytes)))
 	if err != nil {
 		log.Errorf("Got error during request creation %v", err)
 		return User{}, err
@@ -59,7 +61,7 @@ func (client *Client) CreateUser(phoneNumber string) (User, error) {
 //UserList get the list of Shop Users of a Online shop.
 func (client *Client) UserList(limit int, startingAfter, endingBefore string) ([]User, error) {
 
-	url := composeURL(limit, client.endpoint+"/v1/users", startingAfter, endingBefore)
+	url := composeURL(limit, client.endpoint+userSuffix, startingAfter, endingBefore)
 	request, err := http.NewRequest("GET", url, nil)
 
 	if err != nil {
@@ -93,7 +95,7 @@ func (client *Client) GetUser(userID string) (User, error) {
 	if _, err := uuid.FromString(userID); err != nil {
 		return User{}, err
 	}
-	url := client.endpoint + "/v1/users/" + userID
+	url := client.endpoint + userSuffix + userID
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Errorf("Error building request %v", err)
