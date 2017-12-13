@@ -1,8 +1,11 @@
 package client
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 //ChargeStatus represent the status of requested Charge
@@ -39,17 +42,20 @@ const (
 	Expired
 )
 
+//Client is the main structure of this library, represent the main client in order to interact with Satispay platform
 type Client struct {
 	bearerToken string
 	endpoint    string
 	httpClient  *http.Client
 }
 
+//User represent a Satispay user resource
 type User struct {
 	ID          string `json:"id"`
 	PhoneNumber string `json:"phone_number"`
 }
 
+//ChargeRequest represent a Satispay charge request for a target user identified by its id
 type ChargeRequest struct {
 	UserID               string            `json:"user_id"`
 	Description          string            `json:"description"`
@@ -61,18 +67,20 @@ type ChargeRequest struct {
 	ExpireIn             int               `json:"expire_in"`
 }
 
+//Charge represent a Satispay charge
 type Charge struct {
-	ID                   string            `json:"id"`
-	Description          string            `json:"description"`
-	Currency             string            `json:"currency"`
-	Amount               int64             `json:"amount"`
-	Status               ChargeStatus      `json:"status"`
-	UserID               string            `json:"user_id"`
-	UserShortName        string            `json:"user_short_name"`
-	Metadata             map[string]string `json:"metadata"`
-	RequiredSuccessEmail bool              `json:"required_success_email"`
-	ExpireDate           time.Time         `json:"expire_date"`
-	CallbackURL          string            `json:"callback_url"`
+	ID                   string             `json:"id"`
+	Description          string             `json:"description"`
+	Currency             string             `json:"currency"`
+	Amount               int64              `json:"amount"`
+	Status               ChargeStatus       `json:"status"`
+	StatusDetail         ChargeStatusDetail `json:"status_detail"`
+	UserID               string             `json:"user_id"`
+	UserShortName        string             `json:"user_short_name"`
+	Metadata             map[string]string  `json:"metadata"`
+	RequiredSuccessEmail bool               `json:"required_success_email"`
+	ExpireDate           time.Time          `json:"expire_date"`
+	CallbackURL          string             `json:"callback_url"`
 }
 
 // Private types and constants
@@ -89,4 +97,38 @@ type newUser struct {
 type userListResponse struct {
 	HasMore bool   `json:"has_more"`
 	List    []User `json:"list"`
+}
+
+type chargeListResponse struct {
+	HasMore bool     `json:"has_more"`
+	List    []Charge `json:"list"`
+}
+
+type chargeUpdate struct {
+	Description string            `json:"description,omitempty"`
+	Metadata    map[string]string `json:"metadata,omitempty"`
+	ChangeState string            `json:"change_state,omitempty`
+}
+
+//String is the implementation of Stringer interface for ChargeRequest
+func (request *ChargeRequest) String() string {
+	jsonifiedRequest, err := json.Marshal(request)
+
+	if err != nil {
+		log.Errorf("Got error while marshaling request %v", err)
+		return ""
+	}
+
+	return string(jsonifiedRequest)
+}
+
+func (update chargeUpdate) String() string {
+	jsonifiedUpdate, err := json.Marshal(update)
+
+	if err != nil {
+		log.Errorf("Got error while marshaling update %v", err)
+		return ""
+	}
+
+	return string(jsonifiedUpdate)
 }
