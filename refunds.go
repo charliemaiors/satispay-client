@@ -15,6 +15,7 @@ import (
 //Refund could manage idempotency.
 const refundSuffix = "/v1/refunds"
 
+//CreateRefund create a refund, you must specify the Charge to create it on.
 func (client *Client) CreateRefund(refundRequest *RefundRequest) (Refund, error) {
 	url := client.endpoint + refundSuffix
 	request, err := http.NewRequest("POST", url, strings.NewReader(refundRequest.String()))
