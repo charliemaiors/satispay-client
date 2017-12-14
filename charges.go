@@ -10,13 +10,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const suffix = "/v1/charges"
+const chargeSuffix = "/v1/charges"
 
 //CreateCharge create a Charge having a user id.
 func (client *Client) CreateCharge(chargeRequest *ChargeRequest) (Charge, error) {
 
 	reader := strings.NewReader(chargeRequest.String())
-	request, err := http.NewRequest("POST", client.endpoint+suffix, reader)
+	request, err := http.NewRequest("POST", client.endpoint+chargeSuffix, reader)
 
 	if err != nil {
 		log.Errorf("Got error creating the request %v", err)
@@ -72,7 +72,7 @@ func (client *Client) GetChargeList(limit int, startingAfter, endingBefore strin
 		return nil, errors.New("Invalid limit value")
 	}
 
-	url := composeURL(limit, client.endpoint+suffix, startingAfter, endingBefore)
+	url := composeURL(limit, client.endpoint+chargeSuffix, startingAfter, endingBefore)
 	if startingAfterTimestamp > 0 {
 		url += "&starting_after_timestamp=" + string(startingAfterTimestamp)
 	}
@@ -117,7 +117,7 @@ func (client *Client) GetCharge(chargeID string) (Charge, error) {
 		return Charge{}, err
 	}
 
-	url := client.endpoint + suffix + "/" + chargeID
+	url := client.endpoint + chargeSuffix + "/" + chargeID
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Errorf("Error generating http request %v", err)
@@ -173,7 +173,7 @@ func (client *Client) UpdateCharge(chargeID, description string, metadata map[st
 		updateStruct.ChangeState = "CANCELED"
 	}
 
-	url := client.endpoint + suffix + "/" + chargeID
+	url := client.endpoint + chargeSuffix + "/" + chargeID
 	request, err := http.NewRequest("PUT", url, strings.NewReader(updateStruct.String()))
 	if err != nil {
 		log.Errorf("Got error creating request %v", err)

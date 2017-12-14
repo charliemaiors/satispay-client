@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -49,4 +50,48 @@ func (client *Client) CreateRefund(refundRequest *RefundRequest) (Refund, error)
 	}
 
 	return refund, nil
+}
+
+//GetRefund get a refund by id
+func (client *Client) GetRefund(refundID string) (ref Refund, err error) {
+	if _, uuidErr := uuid.FromString(refundID); uuidErr != nil {
+		log.Errorf("Refund ID is not valid %v", err)
+		return ref, uuidErr
+	}
+
+	request, err := http.NewRequest("GET", client.endpoint+refundSuffix+"/"+refundID, nil)
+	if err != nil {
+		log.Errorf("Error creating http request %v", err)
+		return
+	}
+
+	response, err := client.do(request)
+	if err != nil {
+		log.Errorf("Error performing http request %v", err)
+		return
+	}
+
+	if response.StatusCode == 404 {
+		log.Errorf("Refund does not exist")
+		return ref, errors.New("Refund does not exist")
+	}
+
+	if response.StatusCode == 403 {
+		log.Errorf("Try to get a refund of another shop")
+		return ref, errors.New("Try to get a refund of another shop")
+	}
+
+	if response.StatusCode == 400 {
+		log.Errorf("Shop validation error")
+		return ref, errors.New("Shop validation error")
+	}
+
+	dec := json.NewDecoder(response.Body)
+	err = dec.Decode(&ref)
+	if err != nil {
+		log.Errorf("Got error deconding response body %v", err)
+	}
+
+	return
+
 }
