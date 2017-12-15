@@ -95,3 +95,16 @@ func (client *Client) GetRefund(refundID string) (ref Refund, err error) {
 	return
 
 }
+
+func (client *Client) GetRefundList(limit int, startingAfter, endingBefore, chargeID string) ([]Refund, error) {
+
+	url := composeURL(limit, client.endpoint+refundSuffix, startingAfter, endingBefore)
+	if chargeID != "" {
+		if _, err := uuid.FromString(chargeID); err != nil {
+			log.Errorf("Invalid charge id, uuid malformed %v", err)
+			return nil, err
+		}
+		url += "&charge_id=" + chargeID
+	}
+
+}
