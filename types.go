@@ -136,7 +136,16 @@ type chargeListResponse struct {
 type chargeUpdate struct {
 	Description string            `json:"description,omitempty"`
 	Metadata    map[string]string `json:"metadata,omitempty"`
-	ChangeState string            `json:"change_state,omitempty`
+	ChangeState string            `json:"change_state,omitempty"`
+}
+
+type refundListResponse struct {
+	HasMore bool     `json:"has_more"`
+	List    []Refund `json:"list"`
+}
+
+type refundUpdate struct {
+	Metadata map[string]string `json:"metadata"`
 }
 
 //String is the implementation of Stringer interface for ChargeRequest
@@ -165,6 +174,18 @@ func (request *RefundRequest) String() string {
 
 //String is the implementation of Stringer interface for chargeUpdate
 func (update chargeUpdate) String() string {
+	jsonifiedUpdate, err := json.Marshal(update)
+
+	if err != nil {
+		log.Errorf("Got error while marshaling update %v", err)
+		return ""
+	}
+
+	return string(jsonifiedUpdate)
+}
+
+//String is the implementation of Stringer interface for refundUpdate
+func (update refundUpdate) String() string {
 	jsonifiedUpdate, err := json.Marshal(update)
 
 	if err != nil {

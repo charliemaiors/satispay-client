@@ -107,4 +107,81 @@ func (client *Client) GetRefundList(limit int, startingAfter, endingBefore, char
 		url += "&charge_id=" + chargeID
 	}
 
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		log.Errorf("Got error creating the request %v", err)
+		return nil, err
+	}
+
+	response, err := client.do(request)
+	if err != nil {
+		log.Errorf("Got error performing the request %v", err)
+		return nil, err
+	}
+
+	if response.StatusCode == 403 {
+		log.Errorf("Try to get a refund of another shop")
+		return nil, errors.New("Try to get a refund of another shop")
+	}
+
+	if response.StatusCode == 400 {
+		log.Errorf("Beneficiary validation")
+		return nil, errors.New("Beneficiary validation")
+	}
+
+	list := refundListResponse{}
+	dec := json.NewDecoder(response.Body)
+	err = dec.Decode(list)
+	if err != nil {
+		log.Errorf("Error deconding response %v", err)
+		return nil, err
+	}
+
+	return list.List, nil
+}
+
+//UpdateRefund updates the specified refund by setting the values of the parameters passed. Any parameters not provided will be left unchanged.
+func (client *Client) UpdateRefund(refundID string, metadata map[string]string) (ref Refund, err error) {
+	if _, err := uuid.FromString(refundID); err != nil {
+		log.Errorf("Refund ID is not a valid UUID %v", err)
+		return ref, err
+	}
+
+	refundUpdt := refundUpdate{Metadata: metadata}
+	refundReader := strings.NewReader(refundUpdt.String())
+
+	request, err := http.NewRequest("PUT", client.endpoint+refundSuffix+"/"+refundID, refundReader)
+	if err != nil {
+		log.Errorf("Got error creating request %v", err)
+		return ref, err
+	}
+
+	response, err := client.do(request)
+	if err != nil {
+		log.Errorf("Got error performing refund update request %v", err)
+		return ref, err
+	}
+
+	if response.StatusCode == 403 {
+		log.Errorf("Try to update a refund of another user")
+		return ref, errors.New("Try to update a refund of another user")
+	}
+
+	if response.StatusCode == 400 {
+		log.Errorf("Beneficiary validation or body validation error")
+		return ref, errors.New("Beneficiary validation or body validation error")
+	}
+
+	if response.StatusCode == 404 {
+		log.Errorf("Refund does not exist")
+		return ref, errors.New("Refund does not exist")
+	}
+
+	dec := json.NewDecoder(response.Body)
+	err = dec.Decode(&ref)
+	if err != nil {
+		log.Errorf("Error deconding request %v", err)
+	}
+
+	return
 }
