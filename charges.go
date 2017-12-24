@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"strings"
+	"time"
 
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
@@ -57,7 +58,7 @@ func (client *Client) CreateCharge(chargeRequest *ChargeRequest) (Charge, error)
 //If both starting_after and ending before elements are passed return element ending before the id passed.
 //Limit value indicate the number of elements returned.
 //You could also pass a starting_after_timestamp query param with a UNIX timestamp in mills, will be returned the Charges after that date.
-func (client *Client) GetChargeList(limit int, startingAfter, endingBefore string, startingAfterTimestamp int64) ([]Charge, error) {
+func (client *Client) GetChargeList(limit int, startingAfter, endingBefore string, startingAfterDate time.Time) ([]Charge, error) {
 	if _, err := uuid.FromString(startingAfter); err != nil {
 		log.Errorf("Starting after is not valid uuid %v", err)
 		return nil, err
@@ -73,8 +74,11 @@ func (client *Client) GetChargeList(limit int, startingAfter, endingBefore strin
 	}
 
 	url := composeURL(limit, client.endpoint+chargeSuffix, startingAfter, endingBefore)
-	if startingAfterTimestamp > 0 {
-		url += "&starting_after_timestamp=" + string(startingAfterTimestamp)
+	if !startingAfterDate.IsZero() {
+		if startingAfterDate.After(time.Now()) {
+			return nil, errors.New("Invalid date, is after today")
+		}
+		url += "&starting_after_timestamp=" + string(makeTimestamp(startingAfterDate))
 	}
 
 	request, err := http.NewRequest("GET", url, nil)
