@@ -3,6 +3,7 @@ package client
 import (
 	"errors"
 	"net/url"
+	"time"
 
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
@@ -105,4 +106,8 @@ func composeURL(limit int, initialURL, startingAfter, endingBefore string) strin
 		}
 	}
 	return url
+}
+
+func makeTimestamp(date time.Time) int64 {
+	return date.UnixNano() / int64(time.Millisecond)
 }

@@ -99,21 +99,26 @@ type Charge struct {
 
 //RefundRequest represent the request for refund in Satispay Platform
 type RefundRequest struct {
-	ChargeID    string            `json"charge_id"`
-	Description string            `json"description"`
-	Amount      int64             `json"amount"`
-	Currency    string            `json"currency"`
-	Reason      RefundReason      `json"reason"`
-	Metadata    map[string]string `json"metadata"`
+	ChargeID    string            `json:"charge_id"`
+	Description string            `json:"description"`
+	Amount      int64             `json:"amount"`
+	Currency    string            `json:"currency"`
+	Reason      RefundReason      `json:"reason"`
+	Metadata    map[string]string `json:"metadata"`
 }
 
 type Refund struct {
-	ID string `json"id"`
+	ID string `json:"id"`
 	*RefundRequest
 }
 
-// Private types and constants
+type TotalAmount struct {
+	TotalChargeAmountUnit int64  `json:"total_charge_amount_unit"`
+	TotalRefundAmountUnit int64  `json:"total_refund_amount_unit"`
+	Currency              string `json:"currency"`
+}
 
+// Private types and constants
 const (
 	productionEndpoint = "https://authservices.satispay.com/online"
 	sandBoxAPIEndpoint = "https://staging.authservices.satispay.com/online"
