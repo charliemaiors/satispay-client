@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	client "bitbucket.org/cmaiorano/satispay-client"
+	client "github.com/charliemaiors/satispay-client"
 )
 
 var satisClient *client.Client

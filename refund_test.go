@@ -3,7 +3,7 @@ package client_test
 import (
 	"testing"
 
-	client "bitbucket.org/cmaiorano/satispay-client"
+	client "github.com/charliemaiors/satispay-client"
 )
 
 func TestNewRefundUUID(test *testing.T) {
