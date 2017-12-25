@@ -14,7 +14,7 @@ go get github.com/charliemaiors/satispay-client
 And use it in your code:
 
 ```golang
-import "github.com/charliemaiors/satispay-client"
+import client "github.com/charliemaiors/satispay-client"
 
 func main(){
         client, err := client.NewClient("your-satispay-token", false)
