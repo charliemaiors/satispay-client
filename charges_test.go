@@ -1,21 +1,12 @@
 package client_test
 
 import (
+	"os"
 	"testing"
 	"time"
 
 	client "github.com/charliemaiors/satispay-client"
 )
-
-var satisClient *client.Client
-var err error
-
-func init() {
-	satisClient, err = client.NewClient("sdhofdhafshduiahufdafhsudodfshauoo", false)
-	if err != nil {
-		panic(err)
-	}
-}
 
 func TestNewChargeUUID(test *testing.T) {
 	_, err := client.NewChargeRequest("dhofoadisx3j.", "Test charge request", "USD", "http://ciaone.org/", nil, false, 300, -1)
@@ -23,6 +14,27 @@ func TestNewChargeUUID(test *testing.T) {
 		test.Fatal("Expecting error creating new request")
 	}
 	test.Logf("Error is %v", err)
+}
+
+func TestNewChargeValidUUID(test *testing.T) {
+	user, _ := validSatisClient.CreateUser(os.Getenv("PHONE_NUMBER"))
+	chargeReq, err := client.NewChargeRequest(user.ID, "Test charge request", "EUR", "http://ciaone.org/", nil, false, 300, 200)
+	if err != nil {
+		test.Fatalf("Expecting error nil creating new request, but instead is %v", err)
+	}
+
+	charge, err := validSatisClient.CreateCharge(chargeReq)
+	if err != nil {
+		test.Fatalf("Expecting error nil performing new request, but instead is %v", err)
+	}
+	test.Logf("Charge is %+v", charge)
+
+	updatedCharge, err := validSatisClient.UpdateCharge(charge.ID, "Valid update", nil, true)
+	if err != nil {
+		test.Fatalf("Expecting error nil updating request, but instead is %v", err)
+	}
+
+	test.Logf("Updated request is %v", updatedCharge)
 }
 
 func TestNewChargeCurrency(test *testing.T) {

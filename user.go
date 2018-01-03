@@ -16,7 +16,7 @@ const userSuffix = "/v1/users"
 //Once you create a user you do not need to create it again but it is enough create a Charge with the user id used previously.
 //But don’t worry, if you do not store user id you can call again the Create a user and, for the same phone number,
 //it will always return the same user id.
-func (client *Client) CreateUser(phoneNumber string) (User, error) {
+func (client *Client) CreateUser(phoneNumber string) (user User, err error) {
 
 	if phoneNumber == "" {
 		return User{}, errors.New("Phone number missing")
@@ -42,15 +42,22 @@ func (client *Client) CreateUser(phoneNumber string) (User, error) {
 		return User{}, err
 	}
 
+	decoder := json.NewDecoder(response.Body)
 	if response.StatusCode == 400 {
-		return User{}, errors.New("Something bad happened, could be an invalid phone number or shop validation error")
+		satisErr := SatispayError{}
+		err := decoder.Decode(&satisErr)
+		if err != nil {
+			log.Errorf("Error decoding response body for satispay error %v", err)
+			return user, err
+		}
+
+		log.Errorf("Got error from api with error code %d and message %s", satisErr.Code, satisErr.Message)
+		return user, errors.New(satisErr.Message)
 	}
 	if response.StatusCode == 404 {
 		return User{}, errors.New("The phone number isn’t from a registered user")
 	}
 
-	decoder := json.NewDecoder(response.Body)
-	user := User{}
 	err = decoder.Decode(&user)
 	if err != nil {
 		return User{}, err
@@ -79,10 +86,14 @@ func (client *Client) UserList(limit int, startingAfter, endingBefore string) ([
 		log.Errorf("Got 400 in user listing")
 		return nil, errors.New("Beneficiary validation error")
 	}
+	if response.StatusCode == 401 {
+		log.Errorf("Unauthorized")
+		return nil, errors.New("Unauthorized")
+	}
 
 	listResp := userListResponse{}
 	dec := json.NewDecoder(response.Body)
-	err = dec.Decode(listResp)
+	err = dec.Decode(&listResp)
 	if err != nil {
 		log.Errorf("Got error deconding %v", err)
 		return nil, err

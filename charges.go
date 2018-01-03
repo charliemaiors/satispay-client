@@ -190,14 +190,21 @@ func (client *Client) UpdateCharge(chargeID, description string, metadata map[st
 		return Charge{}, err
 	}
 
+	dec := json.NewDecoder(response.Body)
 	if response.StatusCode == 403 {
 		log.Error("Try to update a Charge of another user or Try to cancel a Charge which is already in state SUCCESS")
 		return Charge{}, errors.New("Try to update a Charge of another user or Try to cancel a Charge which is already in state SUCCESS")
 	}
 
 	if response.StatusCode == 400 {
-		log.Error("Beneficiary validation or body validation error")
-		return Charge{}, errors.New("Beneficiary validation or body validation error")
+		satisErr := SatispayError{}
+		err := dec.Decode(&satisErr)
+		if err != nil {
+			log.Errorf("Got error decoding satispay error %v (no is not inception, the top is not spinning)", err)
+			return Charge{}, err
+		}
+		log.Errorf("Got error from api with code %d and message %s", satisErr.Code, satisErr.Message)
+		return Charge{}, errors.New(satisErr.Message)
 	}
 
 	if response.StatusCode == 404 {
@@ -206,7 +213,6 @@ func (client *Client) UpdateCharge(chargeID, description string, metadata map[st
 	}
 
 	charge := Charge{}
-	dec := json.NewDecoder(response.Body)
 	err = dec.Decode(&charge)
 	if err != nil {
 		log.Errorf("Got error deconding response body %v", err)

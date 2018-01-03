@@ -4,7 +4,7 @@ package client
 
 import "fmt"
 
-const _ChargeStatus_name = "RequiredSuccessFailure"
+const _ChargeStatus_name = "REQUIREDSUCCESSFAILURE"
 
 var _ChargeStatus_index = [...]uint8{0, 8, 15, 22}
 

@@ -63,6 +63,12 @@ type Client struct {
 	httpClient  *http.Client
 }
 
+//Represent satispay error message
+type SatispayError struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
+
 //User represent a Satispay user resource
 type User struct {
 	ID          string `json:"id"`
@@ -156,6 +162,17 @@ type refundUpdate struct {
 //String is the implementation of Stringer interface for ChargeRequest
 func (request *ChargeRequest) String() string {
 	jsonifiedRequest, err := json.Marshal(request)
+
+	if err != nil {
+		log.Errorf("Got error while marshaling request %v", err)
+		return ""
+	}
+
+	return string(jsonifiedRequest)
+}
+
+func (charge Charge) String() string {
+	jsonifiedRequest, err := json.Marshal(&charge)
 
 	if err != nil {
 		log.Errorf("Got error while marshaling request %v", err)

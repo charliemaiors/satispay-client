@@ -38,7 +38,7 @@ func (client *Client) CreateRefund(refundRequest *RefundRequest) (Refund, error)
 
 	if response.StatusCode == 403 {
 		log.Error("Try to create a refund for a Charge not owned by user")
-		return Refund{}, errors.New("	Try to create a refund for a Charge not owned by user")
+		return Refund{}, errors.New("Try to create a refund for a Charge not owned by user")
 	}
 
 	dec := json.NewDecoder(response.Body)

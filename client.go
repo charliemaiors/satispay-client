@@ -50,6 +50,10 @@ func (client *Client) CheckBearer() bool {
 	return true
 }
 
+func (client *Client) String() string {
+	return "Client:\nendpoint: " + client.endpoint + "\nbearer: " + client.bearerToken
+}
+
 func (client *Client) do(request *http.Request) (*http.Response, error) {
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Authorization", "Bearer "+client.bearerToken)
