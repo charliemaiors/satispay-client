@@ -80,6 +80,34 @@ func NewRefundRequest(chargeID, description, currency string, amount int64, reas
 	}, nil
 }
 
+//NewCheckoutRequest create a new request for checkout
+func NewCheckoutRequest(phoneNumber, redirectURL, description, callbackURL, currency string, expireIn int32, amount int64) (*CheckoutRequest, error) {
+	if phoneNumber == "" {
+		log.Errorf("Phone number required")
+		return nil, errors.New("Phone number required")
+	}
+
+	if expireIn < 0 || amount < 0 {
+		log.Errorf("Amount or expiration time negative")
+		return nil, errors.New("Amount or expiration time negative")
+	}
+
+	if currency != "EUR" {
+		log.Errorf("Only EUR currency is supported for the moment")
+		return nil, errors.New("Only EUR currency is supported for the moment")
+	}
+
+	return &CheckoutRequest{
+		AmountUnit:  amount,
+		CallbackURL: callbackURL,
+		Currency:    currency,
+		Description: description,
+		ExpireIn:    expireIn,
+		PhoneNumber: phoneNumber,
+		RedirectURL: redirectURL,
+	}, nil
+}
+
 func composeURL(limit int, initialURL, startingAfter, endingBefore string) string {
 	url := initialURL + "?"
 	if limit > 0 && limit < 100 {

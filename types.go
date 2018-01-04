@@ -124,6 +124,23 @@ type TotalAmount struct {
 	Currency              string `json:"currency"`
 }
 
+type CheckoutRequest struct {
+	PhoneNumber string `json:"phone_number"`
+	RedirectURL string `json:"redirect_url"`
+	Description string `json:"description"`
+	CallbackURL string `json:"callback_url"`
+	ExpireIn    int32  `json:"expire_in"`
+	AmountUnit  int64  `json:"amount_unit"`
+	Currency    string `json:"currency"`
+}
+
+type Checkout struct {
+	CheckoutRequest
+	ID          string `json:"id"`
+	CreatedAt   int64  `json:"created_at"`
+	CheckoutURL string `json:"checkout_url"`
+}
+
 // Private types and constants
 const (
 	productionEndpoint = "https://authservices.satispay.com/online"
@@ -173,6 +190,17 @@ func (request *ChargeRequest) String() string {
 
 func (charge Charge) String() string {
 	jsonifiedRequest, err := json.Marshal(&charge)
+
+	if err != nil {
+		log.Errorf("Got error while marshaling charge %v", err)
+		return ""
+	}
+
+	return string(jsonifiedRequest)
+}
+
+func (request *CheckoutRequest) String() string {
+	jsonifiedRequest, err := json.Marshal(request)
 
 	if err != nil {
 		log.Errorf("Got error while marshaling request %v", err)
