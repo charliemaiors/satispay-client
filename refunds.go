@@ -17,7 +17,7 @@ import (
 const refundSuffix = "/v1/refunds"
 
 //CreateRefund create a refund, you must specify the Charge to create it on.
-func (client *Client) CreateRefund(refundRequest *RefundRequest) (Refund, error) {
+func (client *Client) CreateRefund(refundRequest *RefundRequest, idempotencyKey string) (Refund, error) {
 	url := client.endpoint + refundSuffix
 	request, err := http.NewRequest("POST", url, strings.NewReader(refundRequest.String()))
 	if err != nil {
@@ -25,7 +25,7 @@ func (client *Client) CreateRefund(refundRequest *RefundRequest) (Refund, error)
 		return Refund{}, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, idempotencyKey)
 	if err != nil {
 		log.Errorf("Got error performing request %v", err)
 		return Refund{}, err
@@ -65,7 +65,7 @@ func (client *Client) GetRefund(refundID string) (ref Refund, err error) {
 		return
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, "")
 	if err != nil {
 		log.Errorf("Error performing http request %v", err)
 		return
@@ -113,7 +113,7 @@ func (client *Client) GetRefundList(limit int, startingAfter, endingBefore, char
 		return nil, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, "")
 	if err != nil {
 		log.Errorf("Got error performing the request %v", err)
 		return nil, err
@@ -156,7 +156,7 @@ func (client *Client) UpdateRefund(refundID string, metadata map[string]string) 
 		return ref, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, "")
 	if err != nil {
 		log.Errorf("Got error performing refund update request %v", err)
 		return ref, err

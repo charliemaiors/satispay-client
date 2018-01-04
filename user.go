@@ -16,7 +16,7 @@ const userSuffix = "/v1/users"
 //Once you create a user you do not need to create it again but it is enough create a Charge with the user id used previously.
 //But don’t worry, if you do not store user id you can call again the Create a user and, for the same phone number,
 //it will always return the same user id.
-func (client *Client) CreateUser(phoneNumber string) (user User, err error) {
+func (client *Client) CreateUser(phoneNumber, idempotencyKey string) (user User, err error) {
 
 	if phoneNumber == "" {
 		return User{}, errors.New("Phone number missing")
@@ -36,7 +36,7 @@ func (client *Client) CreateUser(phoneNumber string) (user User, err error) {
 		return User{}, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, idempotencyKey)
 	if err != nil {
 		log.Errorf("Got error in response %v", err)
 		return User{}, err
@@ -76,7 +76,7 @@ func (client *Client) UserList(limit int, startingAfter, endingBefore string) ([
 		return nil, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, "")
 	if err != nil {
 		log.Errorf("Got error perfoming http request %v", err)
 		return nil, err
@@ -113,7 +113,7 @@ func (client *Client) GetUser(userID string) (User, error) {
 		return User{}, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, "")
 
 	if response.StatusCode == 404 {
 		return User{}, errors.New("UserShop don’t exist")

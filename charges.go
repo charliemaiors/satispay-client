@@ -14,7 +14,7 @@ import (
 const chargeSuffix = "/v1/charges"
 
 //CreateCharge create a Charge having a user id.
-func (client *Client) CreateCharge(chargeRequest *ChargeRequest) (Charge, error) {
+func (client *Client) CreateCharge(chargeRequest *ChargeRequest, idempotencyKey string) (Charge, error) {
 
 	reader := strings.NewReader(chargeRequest.String())
 	request, err := http.NewRequest("POST", client.endpoint+chargeSuffix, reader)
@@ -24,7 +24,7 @@ func (client *Client) CreateCharge(chargeRequest *ChargeRequest) (Charge, error)
 		return Charge{}, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, idempotencyKey)
 
 	if err != nil {
 		log.Errorf("Got error performing the request %v", err)
@@ -87,7 +87,7 @@ func (client *Client) GetChargeList(limit int, startingAfter, endingBefore strin
 		return nil, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, "")
 	if err != nil {
 		log.Errorf("Error performing http request %v", err)
 		return nil, err
@@ -128,7 +128,7 @@ func (client *Client) GetCharge(chargeID string) (Charge, error) {
 		return Charge{}, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, "")
 	if err != nil {
 		log.Errorf("Error performing http request %v", err)
 		return Charge{}, err
@@ -184,7 +184,7 @@ func (client *Client) UpdateCharge(chargeID, description string, metadata map[st
 		return Charge{}, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, "")
 	if err != nil {
 		log.Errorf("Got error performing request %v", err)
 		return Charge{}, err

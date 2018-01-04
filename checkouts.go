@@ -12,14 +12,14 @@ import (
 const checkoutsSuffix = "/v1/checkouts"
 
 //CreateCheckout creates a new checkout on Satispay Platform
-func (client *Client) CreateCheckout(checkoutRequest *CheckoutRequest) (checkout Checkout, err error) {
+func (client *Client) CreateCheckout(checkoutRequest *CheckoutRequest, idempotencyKey string) (checkout Checkout, err error) {
 	request, err := http.NewRequest("POST", client.endpoint+checkoutsSuffix, strings.NewReader(checkoutRequest.String()))
 	if err != nil {
 		log.Errorf("Got error creating http request %v", err)
 		return checkout, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, idempotencyKey)
 	if err != nil {
 		log.Errorf("Got error performing  http request %v", err)
 		return checkout, err

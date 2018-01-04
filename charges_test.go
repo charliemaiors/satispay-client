@@ -17,13 +17,13 @@ func TestNewChargeUUID(test *testing.T) {
 }
 
 func TestNewChargeValidUUID(test *testing.T) {
-	user, _ := validSatisClient.CreateUser(os.Getenv("PHONE_NUMBER"))
+	user, _ := validSatisClient.CreateUser(os.Getenv("PHONE_NUMBER"), "")
 	chargeReq, err := client.NewChargeRequest(user.ID, "Test charge request", "EUR", "http://ciaone.org/", nil, false, 300, 200)
 	if err != nil {
 		test.Fatalf("Expecting error nil creating new request, but instead is %v", err)
 	}
 
-	charge, err := validSatisClient.CreateCharge(chargeReq)
+	charge, err := validSatisClient.CreateCharge(chargeReq, "")
 	if err != nil {
 		test.Fatalf("Expecting error nil performing new request, but instead is %v", err)
 	}
@@ -35,6 +35,31 @@ func TestNewChargeValidUUID(test *testing.T) {
 	}
 
 	test.Logf("Updated request is %v", updatedCharge)
+}
+
+func TestNewChargeValidUUIDIdempotent(test *testing.T) {
+	user, _ := validSatisClient.CreateUser(os.Getenv("PHONE_NUMBER"), "")
+	chargeReq, err := client.NewChargeRequest(user.ID, "Test charge request", "EUR", "http://ciaone.org/", nil, false, 300, 60)
+	if err != nil {
+		test.Fatalf("Expecting error nil creating new request, but instead is %v", err)
+	}
+
+	charge, err := validSatisClient.CreateCharge(chargeReq, "1")
+	if err != nil {
+		test.Fatalf("Expecting error nil performing new request, but instead is %v", err)
+	}
+	test.Logf("Charge is %+v", charge)
+
+	charge2, err := validSatisClient.CreateCharge(chargeReq, "1")
+	if err != nil {
+		test.Fatalf("Expecting error nil performing new request, but instead is %v", err)
+	}
+	test.Logf("Charge is %+v", charge2)
+
+	if charge.ID != charge2.ID {
+		test.Fatal("Expected equals charge structure but instead are different")
+	}
+	test.Logf("Charges are equal? %v", charge.ID == charge2.ID)
 }
 
 func TestNewChargeCurrency(test *testing.T) {

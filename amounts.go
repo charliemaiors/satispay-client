@@ -28,7 +28,7 @@ func (client *Client) GetTotalAmount(startingDate, endingDate time.Time) (amount
 		return amount, err
 	}
 
-	response, err := client.do(request)
+	response, err := client.do(request, "")
 	if err != nil {
 		log.Errorf("Got error performing the http request, details: %v", err)
 		return
