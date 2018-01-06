@@ -210,6 +210,17 @@ func (request *CheckoutRequest) String() string {
 	return string(jsonifiedRequest)
 }
 
+func (satisErr SatispayError) String() string {
+	jsonifiedRequest, err := json.Marshal(satisErr)
+
+	if err != nil {
+		log.Errorf("Got error while marshaling request %v", err)
+		return ""
+	}
+
+	return string(jsonifiedRequest)
+}
+
 //String is the implementation of Stringer interface for RefundRequest
 func (request *RefundRequest) String() string {
 	jsonifiedRequest, err := json.Marshal(request)

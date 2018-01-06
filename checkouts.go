@@ -13,6 +13,7 @@ const checkoutsSuffix = "/v1/checkouts"
 
 //CreateCheckout creates a new checkout on Satispay Platform
 func (client *Client) CreateCheckout(checkoutRequest *CheckoutRequest, idempotencyKey string) (checkout Checkout, err error) {
+	log.Debugf("Request is %s", checkoutRequest.String())
 	request, err := http.NewRequest("POST", client.endpoint+checkoutsSuffix, strings.NewReader(checkoutRequest.String()))
 	if err != nil {
 		log.Errorf("Got error creating http request %v", err)
@@ -34,7 +35,7 @@ func (client *Client) CreateCheckout(checkoutRequest *CheckoutRequest, idempoten
 			log.Errorf("Error decoding satispay error %v", err)
 			return checkout, err
 		}
-
+		log.Debugf("Satispay Error is %s", satisErr.String())
 		return checkout, errors.New(satisErr.Message)
 	}
 
