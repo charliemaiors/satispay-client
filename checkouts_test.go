@@ -24,7 +24,7 @@ func TestNewCheckout(test *testing.T) {
 	}
 	test.Logf("Charge is %s", charge.String())
 
-	req, err := client.NewCheckoutRequest(os.Getenv("PHONE_NUMBER"), "http://test.org", "", "http://test.org/mycallback?charge="+charge.ID, "EUR", 900, 6400)
+	req, err := client.NewCheckoutRequest(os.Getenv("PHONE_NUMBER"), "http://test.org", "", "http://test.org/mycallback?charge="+charge.ID, "EUR", 6400)
 	if err != nil {
 		test.Fatalf("Expecting error nil but instead is %v", err)
 	}

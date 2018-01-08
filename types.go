@@ -129,13 +129,13 @@ type CheckoutRequest struct {
 	RedirectURL string `json:"redirect_url"`
 	Description string `json:"description"`
 	CallbackURL string `json:"callback_url"`
-	ExpireIn    int32  `json:"expire_in"`
 	AmountUnit  int64  `json:"amount_unit"`
 	Currency    string `json:"currency"`
 }
 
 type Checkout struct {
 	CheckoutRequest
+	ExpireIn    int32  `json:"expire_in"`
 	ID          string `json:"id"`
 	CreatedAt   int64  `json:"created_at"`
 	CheckoutURL string `json:"checkout_url"`
