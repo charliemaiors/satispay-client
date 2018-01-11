@@ -11,6 +11,7 @@ import (
 
 const amountSuffix = "/v1/amounts"
 
+//GetTotalAmount calculate the total amount of Charges in SUCCESS status and the total amount of Refunds within a specific timeframe.
 func (client *Client) GetTotalAmount(startingDate, endingDate time.Time) (amount TotalAmount, err error) {
 	if endingDate.Before(startingDate) {
 		return amount, errors.New("Ending date is before starting date")
