@@ -113,17 +113,21 @@ type RefundRequest struct {
 	Metadata    map[string]string `json:"metadata"`
 }
 
+//Refund is the rapresentation of refund object in Satispay Platform, this object will be defined (and returned) after
+//definition of a RefundRequest and submission to platform
 type Refund struct {
 	ID string `json:"id"`
 	*RefundRequest
 }
 
+//TotalAmount represent the total charge requested and refunds using Satispay Platform
 type TotalAmount struct {
 	TotalChargeAmountUnit int64  `json:"total_charge_amount_unit"`
 	TotalRefundAmountUnit int64  `json:"total_refund_amount_unit"`
 	Currency              string `json:"currency"`
 }
 
+//CheckoutRequest represent the request for a checkout, please be sure that you have created a charge before
 type CheckoutRequest struct {
 	PhoneNumber string `json:"phone_number"`
 	RedirectURL string `json:"redirect_url"`
@@ -133,6 +137,7 @@ type CheckoutRequest struct {
 	Currency    string `json:"currency"`
 }
 
+//Checkout is the resulting object after submission of a new CheckoutRequest
 type Checkout struct {
 	CheckoutRequest
 	ExpireIn    int32  `json:"expire_in"`

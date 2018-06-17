@@ -1,5 +1,5 @@
 # Satispay golang client
-[![Build Status](https://travis-ci.org/charliemaiors/satispay-client.svg?branch=master)](https://travis-ci.org/charliemaiors/satispay-client)
+[![Build Status](https://travis-ci.org/charliemaiors/satispay-client.svg?branch=master)](https://travis-ci.org/charliemaiors/satispay-client)  [![GoDoc](https://godoc.org/charliemaiors/satispay-client?status.svg)](http://godoc.org/github.com/charliemaiors/satispay-client)
 
 This is the implementation of a client library (written in golang) in order to interact with [Satispay online API](https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html).
 
