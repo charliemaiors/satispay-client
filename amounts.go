@@ -11,6 +11,7 @@ import (
 
 const amountSuffix = "/v1/amounts"
 
+//GetTotalAmount returns the total amount in a given time slice
 func (client *Client) GetTotalAmount(startingDate, endingDate time.Time) (amount TotalAmount, err error) {
 	if endingDate.Before(startingDate) {
 		return amount, errors.New("Ending date is before starting date")

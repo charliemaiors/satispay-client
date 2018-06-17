@@ -96,6 +96,7 @@ func (client *Client) GetRefund(refundID string) (ref Refund, err error) {
 
 }
 
+//GetRefundList returns a list of refund objects issued in a predetermined time window
 func (client *Client) GetRefundList(limit int, startingAfter, endingBefore, chargeID string) ([]Refund, error) {
 
 	url := composeURL(limit, client.endpoint+refundSuffix, startingAfter, endingBefore)
