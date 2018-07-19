@@ -63,7 +63,7 @@ type Client struct {
 	httpClient  *http.Client
 }
 
-//Represent satispay error message
+//SatispayError represent satispay error message
 type SatispayError struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`

@@ -102,6 +102,7 @@ func (client *Client) UserList(limit int, startingAfter, endingBefore string) ([
 	return listResp.List, nil
 }
 
+//GetUser return a user data from a given user ID
 func (client *Client) GetUser(userID string) (User, error) {
 	if _, err := uuid.FromString(userID); err != nil {
 		return User{}, err

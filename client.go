@@ -56,7 +56,10 @@ func (client *Client) String() string {
 
 func (client *Client) do(request *http.Request, idempotencyKey string) (*http.Response, error) {
 
-	request.Header.Set("Content-Type", "application/json")
+	if request.Method == "POST" {
+		request.Header.Set("Content-Type", "application/json")
+	}
+	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", "Bearer "+client.bearerToken)
 	if idempotencyKey != "" {
 		request.Header.Set("Idempotency-Key", idempotencyKey)

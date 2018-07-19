@@ -9,9 +9,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-//NewChargeRequest create a new ChargeRequest performing validations on parameters as specified in Satispay API documentation
-//https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html#create-a-charge
-func NewChargeRequest(userID, description, currency, callbackUrl string, metadata map[string]string, requiredSuccessEmail bool, amount int64, expireIn int) (*ChargeRequest, error) {
+//NewChargeRequest create a new ChargeRequest performing validations on parameters as specified in Satispay API documentation https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html#create-a-charge
+func NewChargeRequest(userID, description, currency, callbackURL string, metadata map[string]string, requiredSuccessEmail bool, amount int64, expireIn int) (*ChargeRequest, error) {
 	_, err := uuid.FromString(userID)
 
 	if err != nil {
@@ -34,7 +33,7 @@ func NewChargeRequest(userID, description, currency, callbackUrl string, metadat
 		return nil, errors.New("Invalid value for amount")
 	}
 
-	if _, err := url.ParseRequestURI(callbackUrl); err != nil {
+	if _, err := url.ParseRequestURI(callbackURL); err != nil {
 		log.Errorf("Got error validating callback url %v", err)
 		return nil, err
 	}
@@ -44,11 +43,10 @@ func NewChargeRequest(userID, description, currency, callbackUrl string, metadat
 		expireIn = 900
 	}
 
-	return &ChargeRequest{Amount: amount, CallBackURL: callbackUrl, Currency: currency, Description: description, ExpireIn: expireIn, Metdata: metadata, RequiredSuccessEmail: requiredSuccessEmail, UserID: userID}, nil
+	return &ChargeRequest{Amount: amount, CallBackURL: callbackURL, Currency: currency, Description: description, ExpireIn: expireIn, Metdata: metadata, RequiredSuccessEmail: requiredSuccessEmail, UserID: userID}, nil
 }
 
-//NewRefundRequest create a new refund request structure performing validation described in Satispay API
-//https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html#create-a-refund
+//NewRefundRequest create a new refund request structure performing validation described in Satispay API https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html#create-a-refund
 func NewRefundRequest(chargeID, description, currency string, amount int64, reason RefundReason, metadata map[string]string) (*RefundRequest, error) {
 	if _, err := uuid.FromString(chargeID); err != nil {
 		log.Errorf("Invalid charge id %v", err)
