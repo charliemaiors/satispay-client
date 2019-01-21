@@ -39,7 +39,7 @@ func TestClientGetRefund(test *testing.T) {
 }
 
 func TestClientGetRefundList(test *testing.T) {
-	_, err := satisClient.GetRefundList(40, "sdhuishufdihfsa.jdi", "fidahufihsfiushafui-", "")
+	_, err := satisClient.GetRefundList(40, "sdhuishufdihfsa.jdi", "fidahufihsfiushafui-", "dk30-2-2-d")
 	if err == nil {
 		test.Fatal("Expecting error creating new request")
 	}
