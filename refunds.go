@@ -132,7 +132,7 @@ func (client *Client) GetRefundList(limit int, startingAfter, endingBefore, char
 
 	list := refundListResponse{}
 	dec := json.NewDecoder(response.Body)
-	err = dec.Decode(list)
+	err = dec.Decode(&list)
 	if err != nil {
 		log.Errorf("Error deconding response %v", err)
 		return nil, err

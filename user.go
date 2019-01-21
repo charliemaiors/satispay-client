@@ -116,13 +116,17 @@ func (client *Client) GetUser(userID string) (User, error) {
 
 	response, err := client.do(request, "")
 
+	if err != nil {
+		return User{}, err
+	}
+
 	if response.StatusCode == 404 {
 		return User{}, errors.New("UserShop don’t exist")
 	}
 
 	user := User{}
 	dec := json.NewDecoder(response.Body)
-	err = dec.Decode(user)
+	err = dec.Decode(&user)
 
 	if err != nil {
 		log.Errorf("Got error deconding %v", err)
