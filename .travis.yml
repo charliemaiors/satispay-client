@@ -1,12 +1,26 @@
 sudo: required
 language: go
+
+go:
+- "1.11.x"
+
 os:
 - linux
+
 branches:
   only:
   - master
-go:
-- "1.10"
+
+before_script:
+  - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $GOPATH/bin $GOLANGCILINT_VERSION
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 
 script:
-- go test -v ./...
+- golangci-lint run       # run a bunch of code checkers/linters in parallel
+- go test -v -race ./...  # Run all the tests with the race detector enabled
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
