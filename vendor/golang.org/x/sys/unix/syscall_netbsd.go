@@ -244,6 +244,16 @@ func Uname(uname *Utsname) error {
 	return nil
 }
 
+<<<<<<< HEAD
+=======
+func Sendfile(outfd int, infd int, offset *int64, count int) (written int, err error) {
+	if raceenabled {
+		raceReleaseMerge(unsafe.Pointer(&ioSync))
+	}
+	return sendfile(outfd, infd, offset, count)
+}
+
+>>>>>>> develop
 /*
  * Exposed directly
  */

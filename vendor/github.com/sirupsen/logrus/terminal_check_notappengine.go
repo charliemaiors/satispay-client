@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // +build !appengine,!js,!windows
+=======
+// +build !appengine,!js,!windows,!aix
+>>>>>>> develop
 
 package logrus
 

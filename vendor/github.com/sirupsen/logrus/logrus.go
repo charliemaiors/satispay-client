@@ -14,6 +14,7 @@ type Level uint32
 
 // Convert the Level to a string. E.g. PanicLevel becomes "panic".
 func (level Level) String() string {
+<<<<<<< HEAD
 	switch level {
 	case TraceLevel:
 		return "trace"
@@ -32,6 +33,13 @@ func (level Level) String() string {
 	}
 
 	return "unknown"
+=======
+	if b, err := level.MarshalText(); err == nil {
+		return string(b)
+	} else {
+		return "unknown"
+	}
+>>>>>>> develop
 }
 
 // ParseLevel takes a string level and returns the Logrus log level constant.
@@ -69,6 +77,30 @@ func (level *Level) UnmarshalText(text []byte) error {
 	return nil
 }
 
+<<<<<<< HEAD
+=======
+func (level Level) MarshalText() ([]byte, error) {
+	switch level {
+	case TraceLevel:
+		return []byte("trace"), nil
+	case DebugLevel:
+		return []byte("debug"), nil
+	case InfoLevel:
+		return []byte("info"), nil
+	case WarnLevel:
+		return []byte("warning"), nil
+	case ErrorLevel:
+		return []byte("error"), nil
+	case FatalLevel:
+		return []byte("fatal"), nil
+	case PanicLevel:
+		return []byte("panic"), nil
+	}
+
+	return nil, fmt.Errorf("not a valid logrus level %d", level)
+}
+
+>>>>>>> develop
 // A constant exposing all logging levels
 var AllLevels = []Level{
 	PanicLevel,

@@ -585,6 +585,16 @@ func Poll(fds []PollFd, timeout int) (n int, err error) {
 	return poll(&fds[0], len(fds), timeout)
 }
 
+<<<<<<< HEAD
+=======
+func Sendfile(outfd int, infd int, offset *int64, count int) (written int, err error) {
+	if raceenabled {
+		raceReleaseMerge(unsafe.Pointer(&ioSync))
+	}
+	return sendfile(outfd, infd, offset, count)
+}
+
+>>>>>>> develop
 /*
  * Exposed directly
  */

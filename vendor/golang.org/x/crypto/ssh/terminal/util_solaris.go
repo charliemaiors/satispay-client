@@ -17,7 +17,11 @@ type State struct {
 	termios unix.Termios
 }
 
+<<<<<<< HEAD
 // IsTerminal returns true if the given file descriptor is a terminal.
+=======
+// IsTerminal returns whether the given file descriptor is a terminal.
+>>>>>>> develop
 func IsTerminal(fd int) bool {
 	_, err := unix.IoctlGetTermio(fd, unix.TCGETA)
 	return err == nil

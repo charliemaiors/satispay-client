@@ -1,6 +1,10 @@
 package logrus
 
 import (
+<<<<<<< HEAD
+=======
+	"context"
+>>>>>>> develop
 	"io"
 	"time"
 )
@@ -55,6 +59,14 @@ func WithError(err error) *Entry {
 	return std.WithField(ErrorKey, err)
 }
 
+<<<<<<< HEAD
+=======
+// WithContext creates an entry from the standard logger and adds a context to it.
+func WithContext(ctx context.Context) *Entry {
+	return std.WithContext(ctx)
+}
+
+>>>>>>> develop
 // WithField creates an entry from the standard logger and adds a field to
 // it. If you want multiple fields, use `WithFields`.
 //

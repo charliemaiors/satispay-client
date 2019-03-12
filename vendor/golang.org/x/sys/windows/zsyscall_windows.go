@@ -112,6 +112,10 @@ var (
 	procGetProcessTimes                    = modkernel32.NewProc("GetProcessTimes")
 	procDuplicateHandle                    = modkernel32.NewProc("DuplicateHandle")
 	procWaitForSingleObject                = modkernel32.NewProc("WaitForSingleObject")
+<<<<<<< HEAD
+=======
+	procWaitForMultipleObjects             = modkernel32.NewProc("WaitForMultipleObjects")
+>>>>>>> develop
 	procGetTempPathW                       = modkernel32.NewProc("GetTempPathW")
 	procCreatePipe                         = modkernel32.NewProc("CreatePipe")
 	procGetFileType                        = modkernel32.NewProc("GetFileType")
@@ -251,6 +255,10 @@ var (
 	procOpenProcessToken                   = modadvapi32.NewProc("OpenProcessToken")
 	procGetTokenInformation                = modadvapi32.NewProc("GetTokenInformation")
 	procGetUserProfileDirectoryW           = moduserenv.NewProc("GetUserProfileDirectoryW")
+<<<<<<< HEAD
+=======
+	procGetSystemDirectoryW                = modkernel32.NewProc("GetSystemDirectoryW")
+>>>>>>> develop
 )
 
 func RegisterEventSource(uncServerName *uint16, sourceName *uint16) (handle Handle, err error) {
@@ -1084,6 +1092,28 @@ func WaitForSingleObject(handle Handle, waitMilliseconds uint32) (event uint32, 
 	return
 }
 
+<<<<<<< HEAD
+=======
+func waitForMultipleObjects(count uint32, handles uintptr, waitAll bool, waitMilliseconds uint32) (event uint32, err error) {
+	var _p0 uint32
+	if waitAll {
+		_p0 = 1
+	} else {
+		_p0 = 0
+	}
+	r0, _, e1 := syscall.Syscall6(procWaitForMultipleObjects.Addr(), 4, uintptr(count), uintptr(handles), uintptr(_p0), uintptr(waitMilliseconds), 0, 0)
+	event = uint32(r0)
+	if event == 0xffffffff {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+>>>>>>> develop
 func GetTempPath(buflen uint32, buf *uint16) (n uint32, err error) {
 	r0, _, e1 := syscall.Syscall(procGetTempPathW.Addr(), 2, uintptr(buflen), uintptr(unsafe.Pointer(buf)), 0)
 	n = uint32(r0)
@@ -2698,3 +2728,19 @@ func GetUserProfileDirectory(t Token, dir *uint16, dirLen *uint32) (err error) {
 	}
 	return
 }
+<<<<<<< HEAD
+=======
+
+func getSystemDirectory(dir *uint16, dirLen uint32) (len uint32, err error) {
+	r0, _, e1 := syscall.Syscall(procGetSystemDirectoryW.Addr(), 2, uintptr(unsafe.Pointer(dir)), uintptr(dirLen), 0)
+	len = uint32(r0)
+	if len == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+>>>>>>> develop
