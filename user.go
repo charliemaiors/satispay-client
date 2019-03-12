@@ -121,7 +121,7 @@ func (client *Client) GetUser(userID string) (User, error) {
 
 	user := User{}
 	dec := json.NewDecoder(response.Body)
-	err = dec.Decode(user)
+	err = dec.Decode(&user)
 
 	if err != nil {
 		log.Errorf("Got error deconding %v", err)

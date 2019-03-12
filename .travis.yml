@@ -1,12 +1,31 @@
 sudo: required
 language: go
-os:
-- linux
+
 branches:
   only:
   - master
-go:
-- 1.9
+  - "/^v\\d+(\\.\\d+)+$/"
+
+matrix:
+  include:
+    - go: 1.12
+      os: linux
+    - go: 1.11
+      os: linux
+    - go: 1.10
+      os: linux
+    - go: 1.12
+      os: windows
+    - go: 1.11
+      os: windows
+    - go: 1.10
+      os: windows
+    - go: 1.12
+      os: osx
+    - go: 1.11
+      os: osx
+    - go: 1.10
+      os: osx
 
 script:
 - go get -v ./...
