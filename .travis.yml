@@ -8,29 +8,23 @@ branches:
 
 matrix:
   include:
-    - go: 1.12
+    - go: "1.12"
       os: linux
       env: OS="linux"
-    - go: 1.11
+    - go: "1.11"
       os: linux
       env: OS="linux"
-    - go: 1.10
-      os: linux
-      env: OS="linux"
-    - go: 1.12
+    - go: "1.12"
       os: osx
       env: OS="macos"
-    - go: 1.11
-      os: osx
-      env: OS="macos"
-    - go: 1.10
+    - go: "1.11"
       os: osx
       env: OS="macos"
 
 before_script:
   - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $GOPATH/bin $GOLANGCILINT_VERSION
   - go get github.com/axw/gocov/gocov
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-$OS-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 
