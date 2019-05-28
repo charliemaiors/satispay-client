@@ -11,13 +11,7 @@ matrix:
     - go: "1.12"
       os: linux
       env: OS="linux"
-    - go: "1.11"
-      os: linux
-      env: OS="linux"
     - go: "1.12"
-      os: osx
-      env: OS="darwin"
-    - go: "1.11"
       os: osx
       env: OS="darwin"
 
