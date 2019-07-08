@@ -27,7 +27,7 @@ func NewClient(token string, isProduction bool) (*Client, error) {
 	return client, nil
 }
 
-//CheckBearer refers to https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html#api-check-bearer api, this method will check throught satispay api
+//CheckBearer refers to https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html#api-check-bearer api, this method will check through satispay api
 //if the provided token is valid, is highly recommended to use this method after client creation at least the first time
 func (client *Client) CheckBearer() bool {
 	request, err := http.NewRequest("GET", client.endpoint+"/wally-services/protocol/authenticated", nil)

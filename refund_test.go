@@ -7,7 +7,7 @@ import (
 )
 
 func TestNewRefundUUID(test *testing.T) {
-	_, err := client.NewRefundRequest("dhofoadisx3j.", "Test charge request", "EU", -1, client.Fraudolent, nil)
+	_, err := client.NewRefundRequest("dhofoadisx3j.", "Test charge request", "EU", -1, client.Fraudulent, nil)
 	if err == nil {
 		test.Fatal("Expecting error creating new request")
 	}
@@ -15,7 +15,7 @@ func TestNewRefundUUID(test *testing.T) {
 }
 
 func TestNewRefundCurrency(test *testing.T) {
-	_, err := client.NewRefundRequest("68170747-ae17-4799-9698-9059b550f2f0", "Test charge request", "EU", -1, client.Fraudolent, nil)
+	_, err := client.NewRefundRequest("68170747-ae17-4799-9698-9059b550f2f0", "Test charge request", "EU", -1, client.Fraudulent, nil)
 	if err == nil {
 		test.Fatal("Expecting error creating new request")
 	}
@@ -23,7 +23,7 @@ func TestNewRefundCurrency(test *testing.T) {
 }
 
 func TestNewRefundAmount(test *testing.T) {
-	_, err := client.NewRefundRequest("68170747-ae17-4799-9698-9059b550f2f0", "Test charge request", "EU", -1, client.Fraudolent, nil)
+	_, err := client.NewRefundRequest("68170747-ae17-4799-9698-9059b550f2f0", "Test charge request", "EU", -1, client.Fraudulent, nil)
 	if err == nil {
 		test.Fatal("Expecting error creating new request")
 	}

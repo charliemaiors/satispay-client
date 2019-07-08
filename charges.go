@@ -54,7 +54,7 @@ func (client *Client) CreateCharge(chargeRequest *ChargeRequest, idempotencyKey 
 }
 
 //GetChargeList get a list of Charge ordered by creation.
-//To get element staring after or ending before (excluse) a Charge passed populate starting_after or ending_before with the Charge id.
+//To get element staring after or ending before (excludes) a Charge passed populate starting_after or ending_before with the Charge id.
 //If both starting_after and ending before elements are passed return element ending before the id passed.
 //Limit value indicate the number of elements returned.
 //You could also pass a starting_after_timestamp query param with a UNIX timestamp in mills, will be returned the Charges after that date.

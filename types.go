@@ -46,11 +46,11 @@ const (
 type RefundReason int
 
 const (
-	//Duplicate means a charge payed twice for some reason
+	//Duplicate means a charge paid twice for some reason
 	Duplicate RefundReason = iota
 
-	//Fraudolent means that a charge is fraudolent
-	Fraudolent
+	//Fraudulent means that a charge is fraudolent
+	Fraudulent
 
 	//RequestedByCustomer for other reason requested by customer
 	RequestedByCustomer

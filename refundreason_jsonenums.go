@@ -9,14 +9,14 @@ import (
 
 var (
 	_RefundReasonNameToValue = map[string]RefundReason{
-		"DUPLICATE":           Duplicate,
-		"FRAUDOLENT":          Fraudolent,
+		"DUPLICATE":             Duplicate,
+		"FRAUDULENT":            Fraudulent,
 		"REQUESTED_BY_CUSTOMER": RequestedByCustomer,
 	}
 
 	_RefundReasonValueToName = map[RefundReason]string{
 		Duplicate:           "DUPLICATE",
-		Fraudolent:          "FRAUDOLENT",
+		Fraudulent:          "FRAUDULENT",
 		RequestedByCustomer: "REQUESTED_BY_CUSTOMER",
 	}
 )
@@ -26,7 +26,7 @@ func init() {
 	if _, ok := interface{}(v).(fmt.Stringer); ok {
 		_RefundReasonNameToValue = map[string]RefundReason{
 			interface{}(Duplicate).(fmt.Stringer).String():           Duplicate,
-			interface{}(Fraudolent).(fmt.Stringer).String():          Fraudolent,
+			interface{}(Fraudulent).(fmt.Stringer).String():          Fraudulent,
 			interface{}(RequestedByCustomer).(fmt.Stringer).String(): RequestedByCustomer,
 		}
 	}
