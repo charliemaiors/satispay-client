@@ -65,6 +65,7 @@ func TestGetUserList(test *testing.T) {
 
 	test.Logf("The beautifull error message is %v", err)
 }
+*/
 
 func TestGetUserListValid(test *testing.T) {
 	list, err := validSatisClient.UserList(40, "", "")
@@ -74,4 +75,4 @@ func TestGetUserListValid(test *testing.T) {
 
 	test.Logf("The user list is %v", list)
 }
-*/
+
