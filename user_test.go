@@ -56,16 +56,14 @@ func TestGetUser(test *testing.T) {
 	test.Logf("The beautifull error message is %v", err)
 }
 
-
 func TestGetUserList(test *testing.T) {
 	_, err := satisClient.UserList(40, "fdhuaihfaos", "fghufhifsdahiaf")
 	if err == nil {
-		test.Fatalf("Expecting error not nil but instead is %v", err)
+		test.Fatalf("Expecting error nil but instead is %v", err)
 	}
 
 	test.Logf("The beautifull error message is %v", err)
 }
-
 
 func TestGetUserListValid(test *testing.T) {
 	list, err := validSatisClient.UserList(40, "", "")
@@ -75,4 +73,3 @@ func TestGetUserListValid(test *testing.T) {
 
 	test.Logf("The user list is %v", list)
 }
-
