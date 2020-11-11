@@ -24,8 +24,7 @@ before_script:
 
 script:
 - golangci-lint run       # run a bunch of code checkers/linters in parallel
-- go test -v
-#- go test -v -race ./... -coverprofile c.out # Run all the tests with the race detector enabled
+- go test -v -race ./... -coverprofile c.out # Run all the tests with the race detector enabled
 
 after_script:
   - ./cc-test-reporter after-build -t gocov --exit-code $TRAVIS_TEST_RESULT
