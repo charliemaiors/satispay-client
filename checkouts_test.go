@@ -1,12 +1,6 @@
 package client_test
 
-import (
-	"os"
-	"testing"
-
-	client "github.com/charliemaiors/satispay-client"
-)
-
+/*
 func TestNewCheckout(test *testing.T) {
 	user, err := validSatisClient.CreateUser(os.Getenv("PHONE_NUMBER"), "1")
 	if err != nil {
@@ -35,3 +29,4 @@ func TestNewCheckout(test *testing.T) {
 	}
 	test.Logf("Checkout is %v", checkout)
 }
+*/
