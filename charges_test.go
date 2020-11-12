@@ -1,7 +1,6 @@
 package client_test
 
 import (
-	"os"
 	"testing"
 	"time"
 
@@ -16,6 +15,7 @@ func TestNewChargeUUID(test *testing.T) {
 	test.Logf("Error is %v", err)
 }
 
+/*
 func TestNewChargeValidUUID(test *testing.T) {
 	user, _ := validSatisClient.CreateUser(os.Getenv("PHONE_NUMBER"), "")
 	chargeReq, err := client.NewChargeRequest(user.ID, "Test charge request", "EUR", "http://ciaone.org/", nil, false, 300, 200)
@@ -61,6 +61,7 @@ func TestNewChargeValidUUIDIdempotent(test *testing.T) {
 	}
 	test.Logf("Charges are equal? %v", charge.ID == charge2.ID)
 }
+*/
 
 func TestNewChargeCurrency(test *testing.T) {
 	_, err := client.NewChargeRequest("68170747-ae17-4799-9698-9059b550f2f0", "Test charge request", "USD", "http://ciaone.org/", nil, false, 300, -1)
